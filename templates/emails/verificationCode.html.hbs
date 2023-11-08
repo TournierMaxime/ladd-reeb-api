@@ -1,0 +1,12 @@
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verification email</title>
+  </head>
+  <body>
+    <h1>Bonjour {{user.firstName}} {{user.lastName}}</h1>
+    {{user.email}}
+    <p>Confirmez votre email en cliquant sur le lien ci-dessous : </p>
+    <a href="{{verificationCodeUrl}}">Verifier l'email</a>
+  </body>
+</html>
