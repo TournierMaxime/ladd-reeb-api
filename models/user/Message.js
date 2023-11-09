@@ -1,51 +1,51 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../lib/sequelize.js";
-import Account from "./Account.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../lib/sequelize.js'
+import Account from './Account.js'
 
 const Message = sequelize.define(
-  "Message",
+  'Message',
   {
     messageId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+      primaryKey: true
     },
     accountId: {
-      type: DataTypes.UUID,
+      type: DataTypes.UUID
     },
     data: {
       type: DataTypes.JSON,
-      allowNull: false,
+      allowNull: false
     },
     status: {
-      type: DataTypes.ENUM("new", "sent", "error"),
-      defaultValue: "new",
+      type: DataTypes.ENUM('new', 'sent', 'error'),
+      defaultValue: 'new'
     },
     type: {
-      type: DataTypes.ENUM("sms", "email", "push"),
+      type: DataTypes.ENUM('sms', 'email', 'push')
     },
     recipient: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     sentAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
+      defaultValue: DataTypes.NOW
+    }
   },
   {
-    tableName: "Message",
-    freezeTableName: true,
+    tableName: 'Message',
+    freezeTableName: true
   }
-);
-export default Message;
+)
+export default Message
 
 // CASCADE update
 Account.hasMany(Message, {
-  foreignKey: "accountId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accountId',
+  onUpdate: 'CASCADE'
+})
 Message.belongsTo(Account, {
-  foreignKey: "accountId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accountId',
+  onUpdate: 'CASCADE'
+})

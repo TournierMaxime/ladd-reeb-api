@@ -1,30 +1,24 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../lib/sequelize.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../lib/sequelize.js'
 
 const AccessGroup = sequelize.define(
-  "AccessGroup",
+  'AccessGroup',
   {
     accessGroupId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
-    tableName: "AccessGroup",
-    freezeTableName: true,
-    indexes: [
-      {
-        unique: true,
-        fields: ["name"],
-      },
-    ],
+    tableName: 'AccessGroup',
+    freezeTableName: true
   }
-);
+)
 
-export default AccessGroup;
+export default AccessGroup

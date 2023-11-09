@@ -1,68 +1,64 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../lib/sequelize.js";
-import AccessGroup from "./AccessGroup.js";
-import Account from "./Account.js";
-import User from "./User.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../lib/sequelize.js'
+import AccessGroup from './AccessGroup.js'
+import Account from './Account.js'
+import User from './User.js'
 
 const UserToAccountAccessGroup = sequelize.define(
-  "UserToAccountAccessGroup",
+  'UserToAccountAccessGroup',
   {
     userToAccountAccessGroupId: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-      allowNull: false,
+      allowNull: false
     },
     accountId: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: true
     },
     userId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: false
     },
     accessGroupId: {
       type: DataTypes.UUID,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
 
   {
-    tableName: "UserToAccountAccessGroup",
-    freezeTableName: true,
-    indexes: [
-      {
-        unique: true,
-        fields: ["accountId", "userId"],
-      },
-    ],
+    tableName: 'UserToAccountAccessGroup',
+    freezeTableName: true
   }
-);
+)
 
 User.hasMany(UserToAccountAccessGroup, {
-  foreignKey: "userId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'userId',
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE'
+})
 UserToAccountAccessGroup.belongsTo(User, {
-  foreignKey: "userId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'userId',
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE'
+})
 
 Account.hasMany(UserToAccountAccessGroup, {
-  foreignKey: "accountId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accountId',
+  onUpdate: 'CASCADE'
+})
 UserToAccountAccessGroup.belongsTo(Account, {
-  foreignKey: "accountId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accountId',
+  onUpdate: 'CASCADE'
+})
 
 AccessGroup.hasMany(UserToAccountAccessGroup, {
-  foreignKey: "accessGroupId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accessGroupId',
+  onUpdate: 'CASCADE'
+})
 UserToAccountAccessGroup.belongsTo(AccessGroup, {
-  foreignKey: "accessGroupId",
-  onUpdate: "CASCADE",
-});
-export default UserToAccountAccessGroup;
+  foreignKey: 'accessGroupId',
+  onUpdate: 'CASCADE'
+})
+export default UserToAccountAccessGroup

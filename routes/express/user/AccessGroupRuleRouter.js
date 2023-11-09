@@ -1,25 +1,25 @@
-import express from "express";
-import expressAsyncHandler from "express-async-handler";
+import express from 'express'
+import expressAsyncHandler from 'express-async-handler'
 import {
   createAccessGroupRule,
-  searchAccessGroupRule,
-} from "../../../controllers/user/AccessGroupRuleController.js";
-import authorizeAuth from "../../../middleware/authorizeAuth.js";
-import checkAccessRule from "../../../middleware/checkAccessAccounts.js";
+  searchAccessGroupRule
+} from '../../../controllers/user/AccessGroupRuleController.js'
+import authorizeAuth from '../../../middleware/authorizeAuth.js'
+import checkAccessRule from '../../../middleware/checkAccessAccounts.js'
 
-const router = express.Router();
+const router = express.Router()
 
 router.post(
-  "/:accessGroupId/access-rules",
+  '/:accessGroupId/access-rules',
   authorizeAuth,
-  checkAccessRule("access-groups/write"),
+  checkAccessRule('access-groups/write'),
   expressAsyncHandler(createAccessGroupRule)
-);
+)
 router.post(
-  "/access-rules/search",
+  '/access-rules/search',
   authorizeAuth,
-  checkAccessRule("access-groups/read"),
+  checkAccessRule('access-groups/read'),
   expressAsyncHandler(searchAccessGroupRule)
-);
+)
 
-export default router;
+export default router

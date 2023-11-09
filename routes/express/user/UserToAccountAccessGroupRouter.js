@@ -1,34 +1,34 @@
-import express from "express";
-import expressAsyncHandler from "express-async-handler";
+import express from 'express'
+import expressAsyncHandler from 'express-async-handler'
 import {
   createUserToAccountAccessGroup,
   allUserToAccountAccessGroup,
-  getUserToAccountAccessGroup,
-} from "../../../controllers/user/UserToAccountAccessGroupController.js";
-import authorizeAuth from "../../../middleware/authorizeAuth.js";
-import checkAccessRule from "../../../middleware/checkAccessAccounts.js";
+  getUserToAccountAccessGroup
+} from '../../../controllers/user/UserToAccountAccessGroupController.js'
+import authorizeAuth from '../../../middleware/authorizeAuth.js'
+import checkAccessRule from '../../../middleware/checkAccessAccounts.js'
 
-const router = express.Router();
+const router = express.Router()
 
 router.post(
-  "/:accountId/access-groups/:accessGroupId/users",
+  '/:accountId/access-groups/:accessGroupId/users',
   authorizeAuth,
-  checkAccessRule("user-to-account/write"),
+  checkAccessRule('user-to-account/write'),
   expressAsyncHandler(createUserToAccountAccessGroup)
-);
+)
 
 router.post(
-  "/search",
+  '/search',
   authorizeAuth,
-  checkAccessRule("user-to-account/read"),
+  checkAccessRule('user-to-account/read'),
   expressAsyncHandler(allUserToAccountAccessGroup)
-);
+)
 
 router.get(
-  "/:userToAccountAccessGroupId",
+  '/:userToAccountAccessGroupId',
   authorizeAuth,
-  checkAccessRule("user-to-account/read"),
+  checkAccessRule('user-to-account/read'),
   expressAsyncHandler(getUserToAccountAccessGroup)
-);
+)
 
-export default router;
+export default router

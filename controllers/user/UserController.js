@@ -1,7 +1,11 @@
 import { Op } from 'sequelize'
-import { HttpForbiddenError, HttpNotFoundError } from '../../lib/errors.js'
+import { HttpForbiddenError, HttpNotFoundError, HttpBadRequestError } from '../../lib/errors.js'
+import Order from '../../models/Order.js'
+import OrderProduct from '../../models/OrderProduct.js'
 import User from '../../models/user/User.js'
 import UserToAccountAccessGroup from '../../models/user/UserToAccountAccessGroup.js'
+import Wallet from '../../models/Wallet.js'
+import PaymentMean from '../../models/PaymentMean.js'
 
 const searchUsers = async (req, res) => {
   const accounts = req.accounts
@@ -88,14 +92,30 @@ const searchUsers = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-  const userId = req.params.userId
+  const options = {
+    where: { userId: req.params.userId },
+    include: [
+      {
+        model: Order,
+        include: {
+          model: OrderProduct
+        }
+      },
+      {
+        model: Wallet
+      },
+      {
+        model: PaymentMean
+      }
+    ]
+  } // ajouter des attributs
 
   // TODO: doit gérer cet filtre en fonction du groupe d'accès de l'utilisateur, customer = accès qu'à lui même, admin/superAdmin accès aux autres
-  if (req.userId !== userId) {
+  if (req.userId !== req.params.userId) {
     throw new HttpForbiddenError()
   }
 
-  const user = await User.findByPk(userId)
+  const user = await User.findOne(options)
 
   if (!user) {
     throw new HttpNotFoundError('User not found')
@@ -116,15 +136,35 @@ const updateUser = async (req, res) => {
 
   const data = req.body
 
-  const user = await User.findByPk(userId)
+  const user = await User.findOne({ where: { userId } })
+
+  const syncBracelet = 'Votre bracelet a bien été synchronisé avec votre compte'
+
+  if (data.email && user.email !== data.email) {
+    const existingUser = await User.findOne({ where: { email: data.email } })
+    if (existingUser && existingUser.userId !== userId) {
+      throw new HttpBadRequestError('Cet email est déjà associé à un compte')
+    }
+  }
+
+  if (data.pseudo && user.pseudo !== data.pseudo) {
+    const existingUser = await User.findOne({ where: { pseudo: data.pseudo } })
+    if (existingUser && existingUser.userId !== userId) {
+      throw new HttpBadRequestError('Pseudo déjà existant')
+    }
+  }
 
   if (!user) {
     throw new HttpNotFoundError('User not found')
   }
 
+  if (data.braveletId && data.isAssocialtedBracelet) {
+    user.update({ ...data, userId, syncBracelet })
+  }
+
   user.update({ ...data, userId })
 
-  res.status(201).json({})
+  res.status(201).json({ message: 'Profil mis à jour', syncBracelet })
 }
 
 const deleteUser = async (req, res) => {

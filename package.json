@@ -9,13 +9,14 @@
     "dev": "npx nodemon --require dotenv/config --ignore var index.js",
     "devWindows": "npx nodemon --require dotenv/config --ignore var --legacy-watch --polling-interval 4000 index.js",
     "start": "node --require dotenv/config index.js",
-
     "createAccessGroupRules": "node --require dotenv/config scripts/createAccessGroupRules.js",
     "createRoot": "node --require dotenv/config scripts/createRoot.js",
+    "createPaymentType": "node --require dotenv/config scripts/createPaymentType.js",
+    "createProducts": "node --require dotenv/config scripts/createProducts.js",
     "generateAccountApiKey": "node --require dotenv/config scripts/generateAccountApiKey.js",
-    
     "sendEmails": "node --require dotenv/config scripts/sendEmails.js",
-    "sendSms": "node --require dotenv/config scripts/sendSms.js"
+    "sendSms": "node --require dotenv/config scripts/sendSms.js",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "repository": {
     "type": "git",
@@ -41,30 +42,33 @@
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^2.0.20",
-    "prettier": "^2.8.3"
+    "prettier": "^2.8.3",
+    "sequelize-cli": "^6.6.1"
   },
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "@sendgrid/mail": "^7.7.0",
+    "axios": "^1.2.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "jsonwebtoken": "^8.5.1",
-    "mariadb": "^3.0.2",
-    "moment": "^2.29.4",
-    "nodemon": "^2.0.20",
-    "path": "^0.12.7",
-    "sequelize": "^6.26.0",
-    "url": "^0.11.0",
-    "@handlebars/allow-prototype-access": "^1.0.5",
-    "@sendgrid/mail": "^7.7.0",
-    "axios": "^1.2.0",
     "express-async-handler": "^1.2.0",
     "handlebars": "^4.7.7",
     "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^3.0.2",
+    "moment": "^2.29.4",
+    "mysql2": "^3.6.2",
     "nodemailer": "^6.9.0",
+    "nodemon": "^2.0.20",
+    "path": "^0.12.7",
+    "qrcode": "^1.5.3",
+    "sequelize": "^6.26.0",
     "twilio": "^3.83.3",
+    "url": "^0.11.0",
     "winston": "^3.8.2"
   }
 }

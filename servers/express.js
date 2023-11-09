@@ -10,11 +10,21 @@ import {
 import ExpressRouter from '../routes/ExpressRouter.js'
 import cookieParser from 'cookie-parser'
 import { logger } from '../lib/logger.js'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
 const subProcess = 'httpServer'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const expressServer = express()
 const httpServer = createServer(expressServer)
+
+expressServer.use('/images', express.static(path.join(__dirname, '..', 'images')))
+expressServer.use(
+  '/static',
+  express.static(path.join(__dirname, '..', 'var', 'data', 'static'))
+)
 
 expressServer.use(cookieParser())
 expressServer.use(cors({ credentials: true, origin: true }))
@@ -27,6 +37,7 @@ expressServer.get('/', function (req, res) {
 })
 
 expressServer.use('/', ExpressRouter)
+expressServer.set('trust proxy', true)
 
 expressServer.use(latePhaseMiddleware)
 expressServer.use(latePhaseMiddlewareWithError)

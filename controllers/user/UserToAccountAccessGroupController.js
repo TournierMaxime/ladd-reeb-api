@@ -1,127 +1,127 @@
-import { Op } from "sequelize";
-import { HttpNotFoundError } from "../../lib/errors.js";
-import AccessGroup from "../../models/user/AccessGroup.js";
-import Account from "../../models/user/Account.js";
-import User from "../../models/user/User.js";
-import UserToAccountAccessGroup from "../../models/user/UserToAccountAccessGroup.js";
+import { Op } from 'sequelize'
+import { HttpNotFoundError } from '../../lib/errors.js'
+import AccessGroup from '../../models/user/AccessGroup.js'
+import Account from '../../models/user/Account.js'
+import User from '../../models/user/User.js'
+import UserToAccountAccessGroup from '../../models/user/UserToAccountAccessGroup.js'
 
 const createUserToAccountAccessGroup = async (req, res) => {
-  const accountId = req.params.accountId;
-  const accessGroupId = req.params.accessGroupId;
+  const accountId = req.params.accountId
+  const accessGroupId = req.params.accessGroupId
 
-  const email = req.body.email;
+  const email = req.body.email
 
-  const account = await Account.findByPk(accountId);
+  const account = await Account.findByPk(accountId)
 
-  if (!account) throw new HttpNotFoundError("Account does not exist");
+  if (!account) throw new HttpNotFoundError('Account does not exist')
 
-  const accessGroup = await AccessGroup.findByPk(accessGroupId);
+  const accessGroup = await AccessGroup.findByPk(accessGroupId)
 
-  if (!accessGroup) throw HttpNotFoundError("Access group does not exist");
+  if (!accessGroup) throw HttpNotFoundError('Access group does not exist')
 
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findOne({ where: { email } })
 
-  if (!user) throw new HttpNotFoundError("User does not exist");
+  if (!user) throw new HttpNotFoundError('User does not exist')
 
   const userToAccountAccessGroup = await UserToAccountAccessGroup.create({
     accountId,
     accessGroupId,
-    userId: user.userId,
-  });
+    userId: user.userId
+  })
 
   res.status(201).json({
-    userToAccountAccessGroup,
-  });
-};
+    userToAccountAccessGroup
+  })
+}
 
 const allUserToAccountAccessGroup = async (req, res) => {
-  const { accountId, accessGroupId, userId } = req.query;
+  const { accountId, accessGroupId, userId } = req.query
 
-  const filters = [];
+  const filters = []
 
   if (accountId) {
     filters.push({
       accountId: {
-        [Op.eq]: `${accountId}`,
-      },
-    });
+        [Op.eq]: `${accountId}`
+      }
+    })
   }
 
   if (accessGroupId) {
     filters.push({
       accessGroupId: {
-        [Op.eq]: `${accessGroupId}`,
-      },
-    });
+        [Op.eq]: `${accessGroupId}`
+      }
+    })
   }
 
   if (userId) {
     filters.push({
       userId: {
-        [Op.eq]: `${userId}`,
-      },
-    });
+        [Op.eq]: `${userId}`
+      }
+    })
   }
 
   const options = {
     where: {
-      [Op.and]: filters,
+      [Op.and]: filters
     },
 
-    order: [["accountId", "DESC"]],
+    order: [['accountId', 'DESC']],
     include: [
       {
-        model: Account,
+        model: Account
       },
       {
-        model: AccessGroup,
+        model: AccessGroup
       },
       {
-        model: User,
-      },
-    ],
-  };
+        model: User
+      }
+    ]
+  }
 
   const userToAccountAccessGroupList = await UserToAccountAccessGroup.findAll(
     options
-  );
+  )
 
   res.status(200).json({
-    userToAccountAccessGroupList,
-  });
-};
+    userToAccountAccessGroupList
+  })
+}
 
 const getUserToAccountAccessGroup = async (req, res) => {
-  const userToAccountAccessGroupId = req.params.userToAccountAccessGroupId;
+  const userToAccountAccessGroupId = req.params.userToAccountAccessGroupId
 
   const userToAccountAccessGroup = await UserToAccountAccessGroup.findOne({
     where: {
-      userToAccountAccessGroupId,
+      userToAccountAccessGroupId
     },
     include: [
       {
-        model: Account,
+        model: Account
       },
       {
-        model: AccessGroup,
+        model: AccessGroup
       },
       {
-        model: User,
-      },
-    ],
-  });
+        model: User
+      }
+    ]
+  })
 
   if (!userToAccountAccessGroup) {
-    throw new HttpNotFoundError("User to account access group does not exist");
+    throw new HttpNotFoundError('User to account access group does not exist')
   }
 
   res.status(200).json({
-    userToAccountAccessGroup,
-  });
-};
+    userToAccountAccessGroup
+  })
+}
 
 export {
   createUserToAccountAccessGroup,
   getUserToAccountAccessGroup,
-  allUserToAccountAccessGroup,
-};
+  allUserToAccountAccessGroup
+}

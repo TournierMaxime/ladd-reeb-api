@@ -1,45 +1,39 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../lib/sequelize.js";
-import AccessGroup from "./AccessGroup.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../lib/sequelize.js'
+import AccessGroup from './AccessGroup.js'
 
 const AccessGroupRule = sequelize.define(
-  "AccessGroupRule",
+  'AccessGroupRule',
   {
     accessGroupRuleId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      allowNull: false,
+      allowNull: false
     },
     accessGroupId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: false
     },
     rule: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
-    tableName: "AccessGroupRule",
-    freezeTableName: true,
-    indexes: [
-      {
-        unique: true,
-        fields: ["accessGroupId", "rule"],
-      },
-    ],
+    tableName: 'AccessGroupRule',
+    freezeTableName: true
   }
-);
+)
 
 // CASCADE update
 AccessGroup.hasMany(AccessGroupRule, {
-  foreignKey: "accessGroupId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accessGroupId',
+  onUpdate: 'CASCADE'
+})
 AccessGroupRule.belongsTo(AccessGroup, {
-  foreignKey: "accessGroupId",
-  onUpdate: "CASCADE",
-});
+  foreignKey: 'accessGroupId',
+  onUpdate: 'CASCADE'
+})
 
-export default AccessGroupRule;
+export default AccessGroupRule

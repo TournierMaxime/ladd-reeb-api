@@ -4,9 +4,8 @@
     <title>Verification email</title>
   </head>
   <body>
-    <h1>Bonjour {{user.firstName}} {{user.lastName}}</h1>
-    {{user.email}}
-    <p>Confirmez votre email en cliquant sur le lien ci-dessous : </p>
-    <a href="{{verificationCodeUrl}}">Verifier l'email</a>
+    <h1>Bonjour {{user.pseudo}}</h1>
+    <p>Pour confirmer votre inscription un code vous a été envoyé</p>
+    <p>Veuillez insérer ce code dans la page de l'application : <b>{{ user.verificationCode }}</b></p>
   </body>
 </html>

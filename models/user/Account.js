@@ -1,30 +1,30 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../lib/sequelize.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../../lib/sequelize.js'
 
 const Account = sequelize.define(
-  "Account",
+  'Account',
   {
     accountId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
+      primaryKey: true
     },
     status: {
-      type: DataTypes.ENUM("new", "ok", "ko"),
-      defaultValue: "new",
+      type: DataTypes.ENUM('new', 'ok', 'ko'),
+      defaultValue: 'new'
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
     },
     data: {
       type: DataTypes.JSON,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
 
   {
-    tableName: "Account",
-    freezeTableName: true,
+    tableName: 'Account',
+    freezeTableName: true
   }
-);
-export default Account;
+)
+export default Account

@@ -1,57 +1,42 @@
-/** @format */
-import { DataTypes } from "sequelize";
-import { sequelize } from "../lib/sequelize.js";
-import Stock from "./Stock.js";
+import { DataTypes } from 'sequelize'
+import { sequelize } from '../lib/sequelize.js'
 
 const Product = sequelize.define(
-  "Product",
+  'Product',
   {
     productId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      unique: true,
+      primaryKey: true
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     description: {
       type: DataTypes.STRING,
       defaultValue: null,
-      allowNull: true,
+      allowNull: true
     },
     price: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false
     },
     size: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
-    tableName: "Product",
+    tableName: 'Product',
     freezeTableName: true,
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
+    createdAt: 'createdAt',
+    updatedAt: false
   }
-);
+)
 
-Stock.belongsTo(Product, {
-  foreignKey: "productId",
-  onUpdate: "CASCADE",
-  onDelete: "CASCADE",
-});
-
-Product.hasMany(Stock, {
-  foreignKey: "productId",
-  onUpdate: "CASCADE",
-  onDelete: "CASCADE",
-});
-
-export default Product;
+export default Product

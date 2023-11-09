@@ -9,6 +9,7 @@ import Account from '../models/user/Account.js'
 const authorizeAuth = expressAsyncHandler(async (req, res, next) => {
   const laddAuthId = req.headers['x-ladd-auth-id']
   const laddAuthKey = req.headers['x-ladd-auth-key']
+  const tokenDevices = req.cookies.access_token_devices
 
   if (laddAuthId && laddAuthKey) {
     const accountApiKey = await AccountApiKey.findOne({
@@ -36,6 +37,22 @@ const authorizeAuth = expressAsyncHandler(async (req, res, next) => {
 
     req.accountId = accountApiKey.accountId
     req.accountApiKeyId = accountApiKey.accountApiKeyId
+  } else if (tokenDevices) {
+    if (!tokenDevices) {
+      throw new HttpUnauthorizedError('No cookie token given')
+    }
+
+    const data = jwt.verify(tokenDevices, process.env.JWT_DEVICE_SECRET)
+
+    if (!data.userId) throw new HttpUnauthorizedError('Bad jwt token')
+
+    req.userId = data.userId
+
+    const user = await User.findOne({ where: { userId: req.userId } })
+
+    if (!user) throw new HttpUnauthorizedError('User does not exit')
+
+    if (!user.verified) throw new HttpUnauthorizedError('User not verified')
   } else {
     const token = req.cookies.access_token
     if (!token) {
@@ -53,7 +70,6 @@ const authorizeAuth = expressAsyncHandler(async (req, res, next) => {
 
     if (!user.verified) throw new HttpUnauthorizedError('User not verified')
   }
-
   next()
 })
 

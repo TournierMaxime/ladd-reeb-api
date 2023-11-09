@@ -6,6 +6,9 @@ import { logger } from '../lib/logger.js'
 import AccountApiKey from '../models/user/AccountApiKey.js'
 import User from '../models/user/User.js'
 import UserToAccountAccessGroup from '../models/user/UserToAccountAccessGroup.js'
+import Wallet from '../models/Wallet.js'
+import PaymentMean from '../models/PaymentMean.js'
+import PaymentType from '../models/PaymentType.js'
 
 await initDatabase()
 
@@ -66,8 +69,11 @@ await sequelize.transaction(async (transaction) => {
     defaults: {
       firstName: 'Super',
       lastName: 'Admin',
+      pseudo: 'SuperAdmin',
       passwordHash: generateKeyHash(process.env.SUPERADMIN_USER_PASSWORD),
-      verified: true
+      verified: true,
+      braceletId: '1',
+      isAssociatedBracelet: true
     },
     transaction
   })
@@ -79,6 +85,31 @@ await sequelize.transaction(async (transaction) => {
       userId: superAdminUser.userId,
       accountId: null,
       accessGroupId: superAdminAccountAccessGroup.accessGroupId
+    },
+    transaction
+  })
+
+  const wallet = await Wallet.findOrCreate({
+    where: {
+      userId: superAdminUser.userId
+    },
+    transaction
+  })
+
+  const paymentType = await PaymentType.findOne({
+    where: {
+      type: 'Credit Card'
+    },
+    transaction
+  })
+
+  await PaymentMean.findOrCreate({
+    where: {
+      userId: superAdminUser.userId,
+      walletId: wallet[0].walletId,
+      paymentTypeId: paymentType.paymentTypeId,
+      deleted: false,
+      isDefault: true
     },
     transaction
   })

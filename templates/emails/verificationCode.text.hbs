@@ -1,4 +1,4 @@
-Bonjour {{user.firstName}} {{user.lastName}},
+Bonjour {{user.pseudo}},
 
-Veuillez cliquer sur le lien ci-dessous pour finaliser la vérification de votre adresse email :
-{{verificationCodeUrl}}
+Pour confirmer votre inscription un code vous a été envoyé
+Veuillez insérer ce code dans la page de l'application : {{ user.verificationCode }}

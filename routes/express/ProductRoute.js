@@ -1,18 +1,18 @@
-import express from "express";
-const router = express.Router();
-
+import express from 'express'
+import expressAsyncHandler from 'express-async-handler'
 import {
   searchProduct,
   createProduct,
   getProduct,
   updateProduct,
-  deleteProduct,
-} from "../../controllers/ProductController.js";
+  deleteProduct
+} from '../../controllers/ProductController.js'
+const router = express.Router()
 
-router.post("/search", searchProduct);
-router.post("/", createProduct);
-router.get("/:productId", getProduct);
-router.put("/:productId", updateProduct);
-router.delete("/:productId", deleteProduct);
+router.post('/search', expressAsyncHandler(searchProduct))
+router.post('/new', expressAsyncHandler(createProduct))
+router.get('/:productId', expressAsyncHandler(getProduct))
+router.put('/:productId', expressAsyncHandler(updateProduct))
+router.delete('/:productId', expressAsyncHandler(deleteProduct))
 
-export default router;
+export default router
